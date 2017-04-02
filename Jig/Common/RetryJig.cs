@@ -8,8 +8,17 @@ using System.Threading.Tasks;
 
 namespace Jig.Common
 {
+    /// <summary>
+    /// リトライ装置
+    /// </summary>
     public class RetryJig
     {
+        /// <summary>
+        /// メソッドのリトライ実行を行います
+        /// </summary>
+        /// <param name="someMethod">リトライ実行を行うメソッド</param>
+        /// <param name="retryCount">リトライ回数</param>
+        /// <param name="retryWaitCount">リトライ待機秒数</param>
         public static void Retry(Action someMethod, int retryCount, int retryWaitCount)
         {
             Exception exStack = null;
