@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Printing;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Jig.Pdf
@@ -58,7 +59,7 @@ namespace Jig.Pdf
                 throw new FileNotFoundException(this.AdobeReaderPath);
 
             // DefaultPrinterName
-            this.DefaultPrinterName = settings[nameof(DefaultPrinterName)] 
+            this.DefaultPrinterName = settings[nameof(DefaultPrinterName)]
                 ?? new PrintDocument().PrinterSettings.PrinterName;
 
             // JobTimeOutSecound
@@ -81,9 +82,58 @@ namespace Jig.Pdf
             printProcess.StartInfo.Arguments = $@" /t /n /h /s /l ""{filePath}"" ""{this.DefaultPrinterName}""";
             printProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             printProcess.StartInfo.CreateNoWindow = true;
+            try
+            {
+                // ジョブ監視用キュー
+                var que = new LocalPrintServer().GetPrintQueue(this.DefaultPrinterName);
 
-            var que = new LocalPrintServer().
+                // 印刷
+                printProcess.Start();
 
+                // ジョブ監視
+
+            }
+            finally
+            {
+                if (printProcess.HasExited)
+                    printProcess.Kill();
+            }
+        }
+
+        /// <summary>
+        /// 印刷ジョブ開始を監視する
+        /// </summary>
+        private void StartPrintob(string pdfFileName, PrintQueue que)
+        {
+            foreach (var i in Enumerable.Range(0, this.JobTimeOutSecound))
+            {
+                var hasPrintPdfName = que.GetPrintJobInfoCollection().Any(x => x.Name.EndsWith(pdfFileName));
+
+                // キューに対象ジョブがないので終了
+                if (!hasPrintPdfName) return;
+
+                Thread.Sleep(1000);
+            }
+
+            throw new TimeoutException("印刷を開始できませんでした");
+        }
+
+        /// <summary>
+        /// 印刷ジョブ終了を監視する
+        /// </summary>
+        private void FinishPrintob(string pdfFileName, PrintQueue que)
+        {
+            foreach (var i in Enumerable.Range(0, this.JobTimeOutSecound))
+            {
+                var hasPrintPdfName = que.GetPrintJobInfoCollection().Any(x => x.Name.EndsWith(pdfFileName));
+
+                // キューに対象ジョブがないので終了
+                if (!hasPrintPdfName) return;
+
+                Thread.Sleep(1000);
+            }
+
+            throw new TimeoutException("印刷処理がタイムアウトしました");
         }
     }
 }
