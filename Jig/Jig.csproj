@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Cmd\CmdParser.cs" />
     <Compile Include="Cmd\ICmdOptions.cs" />
+    <Compile Include="Common\AssertConfig.cs" />
     <Compile Include="Common\RetryJig.cs" />
     <Compile Include="IO\FilePlus.cs" />
     <Compile Include="IO\SevenZip.cs" />

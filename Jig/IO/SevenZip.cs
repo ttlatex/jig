@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jig.Common;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
@@ -12,10 +13,21 @@ namespace Jig.IO
     {
         #region メンバ変数
         /// <summary>
+        /// 7z実行ファイルパス
+        /// </summary>
+        private string SevenZipExePath;
+        /// <summary>
+        /// リトライ回数
+        /// </summary>
+        public string inSevenZipRetryCount { private set; get; }
+        /// <summary>
+        /// リトライ秒数
+        /// </summary>
+        public int SevenZipRetryWaitSecond { private set; get; }
+        /// <summary>
         /// 初期化の際にコンフィグセクションを読み込んだかどうか
         /// </summary>
         public bool IsReadSection { private set; get; }
-
         #endregion
 
         /// <summary>
@@ -38,7 +50,26 @@ namespace Jig.IO
             this.IsReadSection = true;
 
             // 7z実行パス設定
+            this.SevenZipExePath = settings["SevenZipExePath"];
+            AssertConfig.IsNull(() => this.SevenZipExePath);
+            AssertConfig.IsNotExistFile(() => this.SevenZipExePath);
 
+
+            // リトライ回数
+            this.SevenZipExePath = settings["SevenZipRetryWaitSecond"];
+            if (!string.IsNullOrEmpty(this.SevenZipExePath))
+            {
+                if (!int.TryParse()
+            }
+
+            // リトライ秒数
+            this.SevenZipExePath = settings["SevenZipRetryWaitSecond"];
+            if (!string.IsNullOrEmpty(this.SevenZipExePath))
+            {
+                if (!int.TryParse()
+            }
         }
+
+
     }
 }
