@@ -34,6 +34,7 @@
       <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Oracle.DataAccess, Version=4.122.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=AMD64" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -50,6 +51,7 @@
     <Compile Include="Cmd\CmdParser.cs" />
     <Compile Include="Cmd\ICmdOptions.cs" />
     <Compile Include="Common\AssertConfig.cs" />
+    <Compile Include="Common\Attribute.cs" />
     <Compile Include="Common\RetryJig.cs" />
     <Compile Include="IO\FilePlus.cs" />
     <Compile Include="IO\SevenZip.cs" />
@@ -57,6 +59,9 @@
     <Compile Include="Layout\ModelString.cs" />
     <Compile Include="Pdf\PdfPrinter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryControl\Query.cs" />
+    <Compile Include="QueryControl\QueryExecuter.cs" />
+    <Compile Include="QueryControl\QueryJigInternal.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

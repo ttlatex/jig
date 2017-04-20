@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Diagnostics;
@@ -7,12 +6,13 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Printing;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+
+// todo 名前空間が微妙
 
 namespace Jig.Pdf
 {
+
     public class PdfPrinter
     {
         /// <summary>
