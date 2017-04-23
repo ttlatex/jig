@@ -17,10 +17,6 @@ namespace Jig.QueryControl
     {
         #region メンバ変数
         /// <summary>
-        /// データソースのコネクション文字列
-        /// </summary>
-        private string ConnectionString;
-        /// <summary>
         /// コネクション
         /// </summary>
         private OracleConnection connection;
@@ -39,7 +35,8 @@ namespace Jig.QueryControl
         {
             var connectionString = ConfigurationManager.ConnectionStrings[configSectionName];
             if (connectionString == null) throw new ArgumentNullException(configSectionName);
-            this.ConnectionString = connectionString.ConnectionString;
+            this.connection = new OracleConnection(connectionString.ConnectionString);
+            this.connection.Open();
         }
 
         /// <summary>
