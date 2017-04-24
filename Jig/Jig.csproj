@@ -34,6 +34,10 @@
       <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="itextsharp, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.11\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Oracle.DataAccess, Version=4.122.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=AMD64" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -57,7 +61,10 @@
     <Compile Include="IO\SevenZip.cs" />
     <Compile Include="Layout\LayoutRenderer.cs" />
     <Compile Include="Layout\ModelString.cs" />
+    <Compile Include="Pdf\PdfConstant.cs" />
+    <Compile Include="Pdf\PdfEditorLight.cs" />
     <Compile Include="Pdf\PdfPrinter.cs" />
+    <Compile Include="Pdf\QREncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryControl\Query.cs" />
     <Compile Include="QueryControl\QueryExecuter.cs" />

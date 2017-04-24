@@ -12,7 +12,9 @@ using System.Threading;
 
 namespace Jig.Pdf
 {
-
+    /// <summary>
+    /// PDF印刷
+    /// </summary>
     public class PdfPrinter
     {
         /// <summary>
