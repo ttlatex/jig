@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Sample\Sample.csproj", "{F74645D3-E973-43E0-A48A-2FAB5F044F5E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "A1", "Sample\A1.csproj", "{F74645D3-E973-43E0-A48A-2FAB5F044F5E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jig", "Jig\Jig.csproj", "{BAB220EB-31DB-4845-A431-214480F86EF2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JigTest", "JigTest\JigTest.csproj", "{7B59B35F-1649-446E-B2ED-FDAE9713591D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "B1", "B1\B1.csproj", "{1387F856-4F95-4CA0-A8FE-90C749A729CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{7B59B35F-1649-446E-B2ED-FDAE9713591D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B59B35F-1649-446E-B2ED-FDAE9713591D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B59B35F-1649-446E-B2ED-FDAE9713591D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1387F856-4F95-4CA0-A8FE-90C749A729CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1387F856-4F95-4CA0-A8FE-90C749A729CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1387F856-4F95-4CA0-A8FE-90C749A729CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1387F856-4F95-4CA0-A8FE-90C749A729CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
