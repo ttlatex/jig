@@ -16,38 +16,53 @@ namespace Jig.Pdf
     public class PdfEditorLight
     {
         /// <summary>
-        /// 現在ページ
-        /// このプロパティ必要？
-        /// </summary>
-        public int CurrentPage { get; private set; }
-        /// <summary>
         /// 用紙方向
         /// このプロパティ必要？
         /// </summary>
-        public PaperOrientation Orientation { get; private set; }
+        private PaperOrientation orientation;
         /// <summary>
         /// 出力PDF
         /// </summary>
-        public Document TargetPdf { get; private set; }
+        private Document targetPdf;
         /// <summary>
         /// PDFライター
         /// </summary>
-        public PdfWriter TargetPdfWriter { get; private set; }
+        private PdfWriter targetPdfWriter;
+        /// <summary>
+        /// テンプレート
+        /// </summary>
+        private PdfImportedPage templatePage;
+
+        private Dictionary<FontName, BaseFont> fonts;
 
 
         #region 生成
         public PdfEditorLight()
         {
-            this.CurrentPage = 0;
+            const string msgothicPath = @"C:\Windows\Fonts\msgothic.ttc";
+            const string msminchoPath = @"C:\Windows\Fonts\msmincho.ttc";
+            const string ocrbPath = @"C:\Windows\Fonts\OCRB.TTF";
 
-            if (!File.Exists(@"C:\Windows\Fonts\msgothic.ttc"))
-                throw new FileNotFoundException(@"C:\Windows\Fonts\msgothic.ttc");
-            if (!File.Exists(@"C:\Windows\Fonts\msmincho.ttc"))
-                throw new FileNotFoundException(@"C:\Windows\Fonts\msmincho.ttc");
-            if (!File.Exists(@"C:\Windows\Fonts\OCRB.TTF"))
-                throw new FileNotFoundException(@"C:\Windows\Fonts\OCRB.TTF");
+            if (!File.Exists(msgothicPath))
+                throw new FileNotFoundException(msgothicPath);
+            if (!File.Exists(msminchoPath))
+                throw new FileNotFoundException(msminchoPath);
+            if (!File.Exists(ocrbPath))
+                throw new FileNotFoundException(ocrbPath);
 
-            // todo フォントの事前読み込み
+            // フォントの事前読み込み
+            var gothic = BaseFont.CreateFont(msgothicPath + ",0", BaseFont.IDENTITY_H, true);
+            var pgothic = BaseFont.CreateFont(msgothicPath + ",1", BaseFont.IDENTITY_H, true);
+            var mincho = BaseFont.CreateFont(msminchoPath + ",0", BaseFont.IDENTITY_H, true);
+            var pmincho = BaseFont.CreateFont(msminchoPath + ",1", BaseFont.IDENTITY_H, true);
+            var ocrb = BaseFont.CreateFont(ocrbPath, BaseFont.IDENTITY_H, true);
+
+            fonts = new Dictionary<FontName, BaseFont>();
+            fonts.Add(FontName.Gothic, gothic);
+            fonts.Add(FontName.PGothic, pgothic);
+            fonts.Add(FontName.Mincho, mincho);
+            fonts.Add(FontName.PMincho, pmincho);
+            fonts.Add(FontName.OCRB, ocrb);
         }
         #endregion
 
@@ -60,7 +75,7 @@ namespace Jig.Pdf
         /// <param name="orientation">テンプレートファイル用紙方向</param>
         public void CreatePdf(string outputFilePath, string templateFilePath, int templateTargetPage, PaperOrientation orientation)
         {
-            this.Orientation = orientation;
+            this.orientation = orientation;
 
             // todo: すでにオープンされている場合の動作（テンプレート、本体）　未定
 
@@ -71,19 +86,48 @@ namespace Jig.Pdf
             var templatePdfReader = new PdfReader(templateFilePath);
             if (templateTargetPage > templatePdfReader.NumberOfPages)
                 throw new ArgumentOutOfRangeException(nameof(templateTargetPage));
-            
 
+            this.targetPdf = new Document();// サイズ指定は必要？
+            this.targetPdfWriter = PdfWriter.GetInstance(targetPdf, new FileStream(outputFilePath, FileMode.Create));
+            this.targetPdf.Open();
 
-            this.TargetPdf = new Document();// サイズ指定は必要？
-            this.TargetPdfWriter = PdfWriter.GetInstance(TargetPdf, new FileStream(outputFilePath, FileMode.Create));
-            this.TargetPdf.Open();
-
-            this.TargetPdfWriter.GetImportedPage(templatePdfReader, templateTargetPage);
+            this.templatePage = this.targetPdfWriter.GetImportedPage(templatePdfReader, templateTargetPage);
         }
 
+        /// <summary>
+        /// ページ追加
+        /// </summary>
         public void AddPage()
         {
-            this.CurrentPage++;
+            this.targetPdf.NewPage();
+
+            if (this.orientation == PaperOrientation.Horizontal)
+                this.targetPdfWriter.DirectContent.AddTemplate(this.templatePage, 0, -1f, 1f, 0, 0, this.templatePage.Height);
+            else
+                this.targetPdfWriter.DirectContent.AddTemplate(this.templatePage, 1f, 0, 0, 1f, 0, 0);
+        }
+
+        public void SetText(string target, float x, float y, float fontSize, FontName fontName, Align align)
+        {
+            var content = this.targetPdfWriter.DirectContent;
+
+            content.BeginText();
+            content.SetFontAndSize(this.fonts[fontName], fontSize);
+            content.ShowTextAligned((int)align, target, x, (this.templatePage.Height - y), 0);
+            content.EndText();
+        }
+
+        /// <summary>
+        /// 罫線追加
+        /// </summary>
+        public void SetLine(float lineWidth, float x1, float y1, float x2, float y2)
+        {
+            var content = this.targetPdfWriter.DirectContent;
+
+            content.SetLineWidth(lineWidth);
+            content.MoveTo(x1, (this.templatePage.Height - y1));
+            content.LineTo(x2, (this.templatePage.Height - y2));
+            content.Stroke();
         }
     }
 }

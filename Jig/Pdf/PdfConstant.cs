@@ -34,7 +34,7 @@ namespace Jig.Pdf.PdfConstant
     /// <summary>
     /// フォント
     /// </summary>
-    public enum BasisFont
+    public enum FontName
     {
         OCRB,
         Gothic,
