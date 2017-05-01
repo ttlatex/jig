@@ -12,7 +12,12 @@ namespace B1.QueryFactory
         public static Query SerachQuerry()
         {
             const string sql = @"
-
+SELECT
+  FIRST_NAME
+FROM
+    EMPLOYEES
+Where
+    EMPLOYEE_ID <= 10
 ";
             return new Query(sql, null);
         }

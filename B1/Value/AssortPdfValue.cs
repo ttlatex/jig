@@ -8,8 +8,9 @@ namespace B1.Value
 {
     public class AssortPdfValue
     {
-        public string title { get; set; }
+        public string Title { get; set; }
+        public string Page { get; set; }
 
-        public List<AssortDetailPdfValue> detail { get; set; }
+        public List<AssortDetailPdfValue> Detail { get; set; }
     }
 }

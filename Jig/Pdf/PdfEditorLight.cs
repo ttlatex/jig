@@ -80,6 +80,7 @@ namespace Jig.Pdf
             // todo: すでにオープンされている場合の動作（テンプレート、本体）　未定
 
             // todo nullチェックは？
+
             // テンプレートオープン
             if (!File.Exists(templateFilePath))
                 throw new FileNotFoundException(templateFilePath);
@@ -109,11 +110,12 @@ namespace Jig.Pdf
 
         public void SetText(string target, float x, float y, float fontSize, FontName fontName, Align align)
         {
+            var _target = target ?? "";
             var content = this.targetPdfWriter.DirectContent;
 
             content.BeginText();
             content.SetFontAndSize(this.fonts[fontName], fontSize);
-            content.ShowTextAligned((int)align, target, x, (this.templatePage.Height - y), 0);
+            content.ShowTextAligned((int)align, _target, x, (this.templatePage.Height - y), 0);
             content.EndText();
         }
 

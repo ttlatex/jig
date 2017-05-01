@@ -66,7 +66,7 @@ namespace Jig.Pdf
 
             // JobTimeOutSecound
             string _JobTimeOutSecound = settings[nameof(JobTimeOutSecound)];
-            if (string.IsNullOrEmpty(_JobTimeOutSecound))
+            if (!string.IsNullOrEmpty(_JobTimeOutSecound))
             {
                 if (!int.TryParse(_JobTimeOutSecound, out this.JobTimeOutSecound))
                     throw new ArgumentException(nameof(JobTimeOutSecound) + "には整数値を設定してください");

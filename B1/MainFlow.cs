@@ -1,8 +1,10 @@
-﻿using B1.Settings;
+﻿using B1.Business;
+using B1.Settings;
 using Jig.Pdf;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,7 +48,22 @@ namespace B1
 
         private void MainProcess()
         {
-            this.logger.Info("データを取得します");
+            try
+            {
+                this.logger.Info("データを取得します");
+                var pdfData = new ListValueSelector().SelectItems();
+
+                this.logger.Info("PDFの出力を行います");
+                var pdfPath = Path.Combine(this.appSettings.OutputFolder, "名前リスト_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf");
+                Directory.CreateDirectory(this.appSettings.OutputFolder);
+                new PdfCreator(this.appSettings.TemplatePath, pdfPath).OutputPDF(pdfData);
+
+
+            }
+            catch (Exception ex)
+            {
+                this.logger.Error("主処理", ex);
+            }
 
         }
     }
