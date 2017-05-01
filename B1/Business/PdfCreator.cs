@@ -38,21 +38,22 @@ namespace B1.Business
                 foreach (var pageValue in parameters)
                 {
                     pdfEditor.AddPage();
+                    this.EmbeddedString(pdfEditor, pageValue);
                 }
             }
         }
 
-        private void EmbeddedString(PdfEditorLight pdfEditor, AssortPdfValue pdfValue)
+        private void EmbeddedString(PdfEditorLight pdfEditor, AssortPdfValue pageValue)
         {
             // 共通部貼り付け
-            pdfEditor.SetText(target: pdfValue.Title,
+            pdfEditor.SetText(target: pageValue.Title,
                 x: 250f, y: 70f, fontSize: 12f, fontName: FontName.Gothic, align: Align.Center);
-            pdfEditor.SetText(target: pdfValue.Page,
-                x: 250f, y: 400f, fontSize: 12f, fontName: FontName.Gothic, align: Align.Center);
+            pdfEditor.SetText(target: pageValue.Page,
+                x: 250f, y: 400f, fontSize: 7f, fontName: FontName.Gothic, align: Align.Center);
 
             // 明細部貼り付け
             float interval = 17.55f;
-            pdfValue.Detail.ForEach((x, i) =>
+            pageValue.Detail.ForEach((x, i) =>
             {
                 pdfEditor.SetText(target: x.No,
                     x: 30f, y: 100f + interval * i, fontSize: 8f, fontName: FontName.Gothic, align: Align.Center);

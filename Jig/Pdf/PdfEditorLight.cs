@@ -32,7 +32,13 @@ namespace Jig.Pdf
         /// テンプレート
         /// </summary>
         private PdfImportedPage templatePage;
-
+        /// <summary>
+        /// 用紙サイズ
+        /// </summary>
+        private Rectangle pageSize;
+        /// <summary>
+        /// フォント達
+        /// </summary>
         private Dictionary<FontName, BaseFont> fonts;
 
 
@@ -88,7 +94,13 @@ namespace Jig.Pdf
             if (templateTargetPage > templatePdfReader.NumberOfPages)
                 throw new ArgumentOutOfRangeException(nameof(templateTargetPage));
 
-            this.targetPdf = new Document();// サイズ指定は必要？
+            // ページサイズ決定
+            this.pageSize = (this.orientation == PaperOrientation.Vertical)
+                ? templatePdfReader.GetPageSize(templateTargetPage)
+                : templatePdfReader.GetPageSize(templateTargetPage).Rotate();
+
+            // 新規ODFオープン
+            this.targetPdf = new Document();
             this.targetPdfWriter = PdfWriter.GetInstance(targetPdf, new FileStream(outputFilePath, FileMode.Create));
             this.targetPdf.Open();
 
@@ -100,6 +112,7 @@ namespace Jig.Pdf
         /// </summary>
         public void AddPage()
         {
+            this.targetPdf.SetPageSize(this.pageSize);
             this.targetPdf.NewPage();
 
             if (this.orientation == PaperOrientation.Horizontal)
@@ -108,6 +121,9 @@ namespace Jig.Pdf
                 this.targetPdfWriter.DirectContent.AddTemplate(this.templatePage, 1f, 0, 0, 1f, 0, 0);
         }
 
+        /// <summary>
+        /// テキスト配置
+        /// </summary>
         public void SetText(string target, float x, float y, float fontSize, FontName fontName, Align align)
         {
             var _target = target ?? "";
@@ -143,6 +159,10 @@ namespace Jig.Pdf
         {
             if (disposing)
             {
+                if(this.targetPdf != null && this.targetPdf.IsOpen())
+                {
+                    this.targetPdf.Close();
+                }
             }
         }
         #endregion
