@@ -13,7 +13,7 @@ namespace Jig.Pdf
     /// <summary>
     /// ITextSharp操作クラス
     /// </summary>
-    public class PdfEditorLight
+    public class PdfEditorLight : IDisposable
     {
         /// <summary>
         /// 用紙方向
@@ -120,7 +120,7 @@ namespace Jig.Pdf
         /// <summary>
         /// 罫線追加
         /// </summary>
-        public void SetLine(float lineWidth, float x1, float y1, float x2, float y2)
+        public void SetRule(float lineWidth, float x1, float y1, float x2, float y2)
         {
             var content = this.targetPdfWriter.DirectContent;
 
@@ -129,5 +129,20 @@ namespace Jig.Pdf
             content.LineTo(x2, (this.templatePage.Height - y2));
             content.Stroke();
         }
+
+        #region dispose
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+        }
+        #endregion
     }
 }
