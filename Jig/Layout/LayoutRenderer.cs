@@ -14,7 +14,7 @@ namespace Jig.Layout
         private const string MachineName = "${machinename}";
         private const string Userame = "${username}";
 
-        private const string CustomDatePattern = "[$][{]customedate:{.+?)[}]";
+        private const string CustomDatePattern = "[$][{]customdate:(.+?)[}]";
 
         public static string Render(this string plainText)
         {
@@ -78,7 +78,7 @@ namespace Jig.Layout
 
             foreach(Match format in dateFormats)
             {
-                var replaceTime = currentTime.ToString(format.Groups[0].Value);
+                var replaceTime = currentTime.ToString(format.Groups[1].Value);
                 result = result.Replace(format.Groups[0].Value, replaceTime);
             }
 
