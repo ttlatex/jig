@@ -43,7 +43,7 @@ namespace Jig.QueryControl
         /// マップなしストアドプロシージャ
         /// </summary>
         /// <returns>更新レコード件数</returns>
-        public int StoreProcedureNotMap(Query query)
+        public int StoreProcedure(Query query)
         {
             using (var connection = new OracleConnection(this.ConnectionString))
             {
@@ -55,7 +55,7 @@ namespace Jig.QueryControl
         /// <summary>
         /// マップなしストアドプロシージャ
         /// </summary>
-        public OutputDto StoreProcedureNotMap<OutputDto>(Query query) where OutputDto : new()
+        public OutputDto StoreProcedure<OutputDto>(Query query) where OutputDto : new()
         {
             using (var connection = new OracleConnection(this.ConnectionString))
             {

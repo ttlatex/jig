@@ -44,14 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Common\RetryTest.cs" />
     <Compile Include="IO\SevenZipTest.cs" />
     <Compile Include="Layout\LayoutRendererTest.cs" />
     <Compile Include="Layout\ModelStringTest.cs" />
+    <Compile Include="Pdf\PdfPrintTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Pdf\Penguin.pdf" />
   </ItemGroup>
@@ -63,6 +64,9 @@
       <Project>{bab220eb-31db-4845-a431-214480f86ef2}</Project>
       <Name>Jig</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="QueryControl\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

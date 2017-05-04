@@ -18,7 +18,7 @@ namespace Jig.Cmd
         /// <summary>
         /// Optionsクラスのインスタンスを作成します
         /// </summary>
-        public static Options OptionsInstance<Options>(string[] args) where Options : ICmdOptions, new()
+        public static Options Instance<Options>(string[] args) where Options : ICmdOptions, new()
         {
             Options cmds = new Options();
 
