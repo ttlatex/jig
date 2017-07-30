@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jig.Cmd
+namespace Jig.Settings
 {
     /// <summary>
     /// コマンドライン引数格納用クラスが利用します

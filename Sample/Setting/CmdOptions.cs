@@ -1,5 +1,5 @@
 ﻿using CommandLine;
-using Jig.Cmd;
+using Jig.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -52,8 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cmd\CmdParser.cs" />
-    <Compile Include="Cmd\ICmdOptions.cs" />
+    <Compile Include="Settings\CmdParser.cs" />
+    <Compile Include="Settings\ConfigParser.cs" />
+    <Compile Include="Settings\ICmdOptions.cs" />
     <Compile Include="Common\AssertConfig.cs" />
     <Compile Include="Common\Attribute.cs" />
     <Compile Include="Common\Exception.cs" />

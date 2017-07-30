@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jig.Cmd
+namespace Jig.Settings
 {
     // nugetでCommand Line Parserをダウンロードしてください
     // 参考サイト

@@ -1,6 +1,6 @@
 ﻿using A1.Business;
 using A1.Setting;
-using Jig.Cmd;
+using Jig.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
