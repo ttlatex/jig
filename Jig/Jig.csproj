@@ -53,11 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Settings\CmdParser.cs" />
-    <Compile Include="Settings\ConfigParser.cs" />
     <Compile Include="Settings\ICmdOptions.cs" />
-    <Compile Include="Common\AssertConfig.cs" />
     <Compile Include="Common\Attribute.cs" />
-    <Compile Include="Common\Exception.cs" />
     <Compile Include="Common\RetryJig.cs" />
     <Compile Include="IO\FilePlus.cs" />
     <Compile Include="IO\SevenZip.cs" />
