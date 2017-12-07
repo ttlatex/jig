@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace A1.Setting
+namespace A1.Settings
 {
     public class CmdOptions : ICmdOptions
     {

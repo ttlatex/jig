@@ -4,6 +4,7 @@ using Jig.Pdf;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,12 +19,13 @@ namespace B1
     {
         private ILog logger = LogManager.GetLogger("InfoLogger");
         private PdfPrinter printer;
-        private AppSettings appSettings;
+        private B1Settings appSettings;
 
         public void start()
         {
             if (!this.Init())
                 return;
+
             this.MainProcess();
         }
 
@@ -33,8 +35,7 @@ namespace B1
 
             try
             {
-                this.appSettings = new AppSettings();
-                this.appSettings.ThrowArgumetError();
+                this.appSettings = (B1Settings)ConfigurationManager.GetSection("B1Settings");
                 this.printer = new PdfPrinter();
 
                 return true;

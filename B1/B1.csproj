@@ -81,7 +81,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryFactory\B1Query.cs" />
-    <Compile Include="Settings\AppSettings.cs" />
+    <Compile Include="Settings\B1Settings.cs" />
     <Compile Include="Value\AssortDetailPdfValue.cs" />
     <Compile Include="Value\AssortPdfValue.cs" />
     <Compile Include="Value\SelectedValue.cs" />

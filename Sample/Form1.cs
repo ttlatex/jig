@@ -1,5 +1,5 @@
 ﻿using A1.Business;
-using A1.Setting;
+using A1.Settings;
 using Jig.Settings;
 using System;
 using System.Collections.Generic;
