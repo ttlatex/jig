@@ -29,5 +29,20 @@ namespace B1.Business
                 })
                 .ToList();
         }
+
+        /// <summary>
+        /// 0件時のリスト内容
+        /// </summary>
+        public static List<AssortPdfPage> ZeroCountList()
+        {
+            var pdfValue = new AssortPdfPage()
+            {
+                Title = "名前リスト",
+                Page = "1",
+                Detail = new List<AssortPdfPageDetail> { new AssortPdfPageDetail { Name = "---対象なし---" } },
+            };
+
+            return new List<AssortPdfPage> { pdfValue };
+        }
     }
 }

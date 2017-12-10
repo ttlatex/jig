@@ -39,7 +39,11 @@ namespace B1
             var printer = new PdfPrinter();
 
             this.logger.Info("データを取得します");
-            var pdfData = new ListValueSelector().SelectItems();
+            var records = ListValueSelector.SelectItems();
+
+            var pdfData = (records.Count == 0)
+                ? PdfMapper.ZeroCountList()
+                : PdfMapper.MapToPdf(records);
 
             this.logger.Info("PDFの出力を行います");
             var pdfPath = Path.Combine(settings.OutputFolder, "名前リスト_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf");

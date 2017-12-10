@@ -29,29 +29,16 @@ namespace Jig.Pdf
         /// 出力先プリンタ名
         /// </summary>
         private string DefaultPrinterName;
-        /// <summary>
-        /// 初期化の際にコンフィグセクションを読み込んだか
-        /// </summary>
-        public bool IsReadSection { private set; get; }
-
-        /// <summary>
-        /// 生成部、何も指定しなかった場合コンフィグセクション"PdfPrintSettings"が読み込まれます
-        /// </summary>
-        public PdfPrinter()
-           : this("PdfPrintSettings")
-        {
-        }
 
         /// <summary>
         /// 生成部、コンフィグセクション指定読み込み
         /// </summary>
         /// <param name="sectionName"></param>
-        public PdfPrinter(string sectionName)
+        public PdfPrinter(string sectionName = "PdfPrintSettings")
         {
-            this.IsReadSection = false;
             var settings = ConfigurationManager.GetSection(sectionName) as NameValueCollection;
-            if (settings == null) throw new ArgumentException(sectionName + ":設定ファイル内");
-            this.IsReadSection = true;
+            if (settings == null)
+                throw new ArgumentException(sectionName + ":設定ファイル内");
 
             // AdobeReaderPath
             this.AdobeReaderPath = settings[nameof(AdobeReaderPath)];
@@ -84,6 +71,7 @@ namespace Jig.Pdf
             printProcess.StartInfo.Arguments = $@" /t /n /h /s /l ""{filePath}"" ""{this.DefaultPrinterName}""";
             printProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             printProcess.StartInfo.CreateNoWindow = true;
+
             try
             {
                 // ジョブ監視用キュー
@@ -93,12 +81,12 @@ namespace Jig.Pdf
                 printProcess.Start();
 
                 // ジョブ監視
-
+                StartPrintob(this.DefaultPrinterName, que);
+                FinishPrintob(this.DefaultPrinterName, que);
             }
             finally
             {
-                if (printProcess.HasExited)
-                    printProcess.Kill();
+                printProcess.Dispose();
             }
         }
 
