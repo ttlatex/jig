@@ -17,13 +17,13 @@ namespace Jig.Common
         /// メソッドのリトライ実行を行います
         /// </summary>
         /// <param name="someMethod">リトライ実行を行うメソッド</param>
-        /// <param name="retryCount">リトライ回数</param>
-        /// <param name="retryWaitCount">リトライ待機秒数</param>
-        public static void Retry(Action someMethod, int retryCount, int retryWaitCount)
+        /// <param name="retryCounts">リトライ回数</param>
+        /// <param name="retryWaitMiliSeconds">リトライ待機秒数</param>
+        public static void Retry(Action someMethod, int retryCounts, int retryWaitMiliSeconds)
         {
             Exception exStack = null;
 
-            foreach (var i in Enumerable.Range(1, retryCount + 1))
+            foreach (var i in Enumerable.Range(1, retryCounts + 1))
             {
                 try
                 {
@@ -35,7 +35,7 @@ namespace Jig.Common
                     exStack = exStack ?? ex;
                 }
 
-                Thread.Sleep(retryWaitCount * 1000);
+                Thread.Sleep(retryWaitMiliSeconds);
             }
 
             ExceptionDispatchInfo.Capture(exStack).Throw();
@@ -45,13 +45,13 @@ namespace Jig.Common
         /// メソッドのリトライ実行を行います
         /// </summary>
         /// <param name="someMethod">リトライ実行を行うメソッド</param>
-        /// <param name="retryCount">リトライ回数</param>
-        /// <param name="retryWaitCount">リトライ待機秒数</param>
-        public static void Retry(Action someMethod, int retryCount, int retryWaitCount, Action<Exception> onError)
+        /// <param name="retryCounts">リトライ回数</param>
+        /// <param name="retryWaitMiliSeconds">リトライ待機秒数</param>
+        public static void Retry(Action someMethod, int retryCounts, int retryWaitMiliSeconds, Action<Exception> onError)
         {
             Exception exStack = null;
 
-            foreach (var i in Enumerable.Range(1, retryCount + 1))
+            foreach (var i in Enumerable.Range(1, retryCounts + 1))
             {
                 try
                 {
@@ -65,7 +65,7 @@ namespace Jig.Common
                     onError(ex);
                 }
 
-                Thread.Sleep(retryWaitCount * 1000);
+                Thread.Sleep(retryWaitMiliSeconds);
             }
 
             ExceptionDispatchInfo.Capture(exStack).Throw();

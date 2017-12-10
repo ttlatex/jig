@@ -16,7 +16,6 @@ namespace Jig.IO
 
     public class SevenZip
     {
-        #region メンバ変数
         /// <summary>
         /// 7z実行ファイルパス
         /// </summary>
@@ -24,79 +23,38 @@ namespace Jig.IO
         /// <summary>
         /// リトライ回数
         /// </summary>
-        private int RetryCount;
+        private int RetryCounts;
         /// <summary>
         /// リトライ秒数
         /// </summary>
-        private int RetryWaitSecond;
+        private int RetryWaitMiliSeconds;
         /// <summary>
         /// プロセスタイムアウト秒数
         /// </summary>
-        private int ProcessTimeoutSecond = 60;
+        private int ProcessTimeoutMiliSeconds;
+
+        private SevenZip() { }
 
         /// <summary>
-        /// 初期化の際にコンフィグセクションを読み込んだかどうか
+        /// コンフィグファイルよりインスタンスを生成する
         /// </summary>
-        public bool IsReadSection { private set; get; }
-        #endregion
-
-        /// <summary>
-        /// 生成部 "SevenZipSettings"セクションを読み込みます
-        /// </summary>
-        public SevenZip()
-            : this("SevenZipSettings")
-        {
-        }
-
-        /// <summary>
-        /// コンフィグセクション指定読み込み
-        /// </summary>
-        /// <param name="sectionName"></param>
-        public SevenZip(string sectionName)
+        /// <param name="sectionName">コンフィグセクション名</param>
+        /// <returns>SevenZip</returns>
+        public static SevenZip GetInstance(string sectionName = "SevenZipSettings")
         {
             // コンフィグセクション読込
-            var settings = ConfigurationManager.GetSection(sectionName) as NameValueCollection; // NamevalueConfigCollectionでは？
-            if (settings == null) throw new Exception(sectionName + "セクションの読み込みに失敗しました");
-            this.IsReadSection = true;
+            var settings = (SevenZipSettings)ConfigurationManager.GetSection(sectionName);
+            if (settings == null)
+                throw new Exception(sectionName + "セクションの読み込みに失敗しました");
 
-            // 7z実行パス設定
-            this.SevenZipExePath = settings["SevenZipExePath"];
-            AssertConfig.IsNull(() => this.SevenZipExePath);
-            AssertConfig.IsNotExistFile(() => this.SevenZipExePath);
-
-
-            // リトライ回数
-            var _RetryCount = settings["RetryCount"];
-            if (!string.IsNullOrEmpty(_RetryCount))
+            return new SevenZip
             {
-                if (!int.TryParse(_RetryCount, out this.RetryCount))
-                    throw new ArgumentException("整数値を設定してください 項目名:" + nameof(this.RetryCount));
-                if (this.RetryCount < 0)
-                    throw new ArgumentException("0以上を設定してください 項目名:" + nameof(this.RetryCount));
-            }
-
-            // リトライ秒数
-            var _RetryWaitSecond = settings["RetryWaitSecond"];
-            if (!string.IsNullOrEmpty(_RetryCount))
-            {
-                if (!int.TryParse(_RetryWaitSecond, out this.RetryWaitSecond))
-                    throw new ArgumentException("整数値を設定してください 項目名:" + nameof(this.RetryWaitSecond));
-                if (this.RetryCount < 0)
-                    throw new ArgumentException("0以上を設定してください 項目名:" + nameof(this.RetryWaitSecond));
-            }
-
-            // プロセスタイムアウト秒数秒数
-            var _ProcessTimeoutSecond = settings["ProcessTimeoutSecond"];
-            if (!string.IsNullOrEmpty(_RetryCount))
-            {
-                if (!int.TryParse(_ProcessTimeoutSecond, out this.ProcessTimeoutSecond))
-                    throw new ArgumentException("整数値を設定してください 項目名:" + nameof(this.ProcessTimeoutSecond));
-                if (this.RetryCount < 0)
-                    throw new ArgumentException("0以上を設定してください 項目名:" + nameof(this.ProcessTimeoutSecond));
-            }
+                SevenZipExePath = settings.SevenZipExePath,
+                RetryCounts = settings.RetryCounts,
+                RetryWaitMiliSeconds = settings.RetryWaitMiliSeconds,
+                ProcessTimeoutMiliSeconds = settings.ProcessTimeoutMiliSeconds,
+            };
         }
-
-        #region 暗号化
 
         /// <summary>
         /// 7z暗号化
@@ -133,8 +91,6 @@ namespace Jig.IO
                 throw new DirectoryNotFoundException(Path.GetDirectoryName(destFileName));
         }
 
-        #endregion
-
         /// <summary>
         /// コマンド実行
         /// </summary>
@@ -142,6 +98,7 @@ namespace Jig.IO
         private void Execute(string command)
         {
             var process = new Process();
+
             try
             {
                 process.StartInfo.FileName = this.SevenZipExePath;
@@ -153,12 +110,12 @@ namespace Jig.IO
 
                 process.Start();
 
-                if (this.ProcessTimeoutSecond == 0)
+                if (this.ProcessTimeoutMiliSeconds == 0)
                     // 無限待機注意
                     process.WaitForExit();
                 else
                 {
-                    var isFinished = process.WaitForExit(this.ProcessTimeoutSecond * 1000);
+                    var isFinished = process.WaitForExit(this.RetryWaitMiliSeconds * 1000);
                     if (isFinished)
                         throw new TimeoutException("7z.exeプロセスがタイムアウトしました");
                 }
@@ -171,8 +128,7 @@ namespace Jig.IO
             }
             finally
             {
-                if (!process.HasExited)
-                    process.Dispose();
+                process.Dispose();
             }
         }
 
@@ -182,7 +138,7 @@ namespace Jig.IO
         /// <param name="someMethod"></param>
         private void ZipRetry(Action someMethod)
         {
-            RetryJig.Retry(someMethod, this.RetryCount, this.RetryWaitSecond);
+            RetryJig.Retry(someMethod, this.RetryCounts, this.RetryWaitMiliSeconds);
         }
     }
 }

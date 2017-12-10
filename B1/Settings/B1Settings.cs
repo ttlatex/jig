@@ -21,6 +21,5 @@ namespace B1.Settings
         {
             get { return (string)this["TemplatePath"]; }
         }
-
     }
 }

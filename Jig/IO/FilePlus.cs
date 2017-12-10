@@ -1,12 +1,7 @@
 ﻿using Jig.Common;
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Jig.IO
 {
@@ -18,61 +13,35 @@ namespace Jig.IO
         /// <summary>
         /// ファイル操作リトライ回数
         /// </summary>
-        private int FileRetryCount = 3;
+        private int FileRetryCounts;
         /// <summary>
-        /// ファイル操作リトライ待機秒数
+        /// ファイル操作リトライ待機秒数(ms)
         /// </summary>
-        private int FileRetryWaitSecond = 2;
-        /// <summary>
-        /// コンフィグセクションを読み込んだか
-        /// </summary>
-        public bool IsReadSection { private set; get; }
+        private int FileRetryWaitMiliSeconds;
 
-        #region 生成部
         /// <summary>
-        /// 何も指定しなかった場合コンフィグ内"FilePlusSettings"セクションが読み込まれます
+        /// コンフィグファイルよりインスタンスを生成する
         /// </summary>
-        public FilePlus()
-        : this("FilePlusSettings")
+        /// <param name="sectionName">コンフィグセクション名</param>
+        /// <returns>FilePlus</returns>
+        public FilePlus GetInstance(string sectionName = "FilePlusSettings")
         {
-        }
+            var settings = (FilePlusSettings)ConfigurationManager.GetSection(sectionName);
 
-        /// <summary>
-        /// コンフィグセクションを指定して読み込み
-        /// </summary>
-        /// <param name="sectionName">セクション名 NameValueCollection</param>
-        public FilePlus(string sectionName)
-        {
-            // コンフィグセクション読み込み
-            this.IsReadSection = false;
-            var settings = ConfigurationManager.GetSection(sectionName) as NameValueCollection;  // NameValueConfigurationCollectionは？
-            if (settings == null) return;
-            this.IsReadSection = true;
+            if (settings == null)
+                return new FilePlus
+                {
+                    FileRetryCounts = 3,
+                    FileRetryWaitMiliSeconds = 2000,
+                };
 
-            // リトライカウント設定
-            string inFileRetryCount = settings[nameof(FileRetryCount)];
-            if (!string.IsNullOrEmpty(inFileRetryCount))
+            return new FilePlus
             {
-                if (!int.TryParse(inFileRetryCount, out this.FileRetryCount))
-                    throw new ArgumentException(nameof(FileRetryCount) + "が整数値でありません");
-                if (this.FileRetryCount < 0)
-                    throw new ArgumentException(nameof(FileRetryCount) + "は0以上を設定してください");
-            }
-
-            // リトライ秒数設定
-            string inFileRetryWaitSecond = settings[nameof(FileRetryWaitSecond)];
-            if (!string.IsNullOrEmpty(inFileRetryWaitSecond))
-            {
-                if (!int.TryParse(inFileRetryWaitSecond, out this.FileRetryWaitSecond))
-                    throw new ArgumentException(nameof(FileRetryWaitSecond) + "が整数値でありません");
-                if (this.FileRetryWaitSecond < 0)
-                    throw new ArgumentException(nameof(FileRetryWaitSecond) + "は0以上を設定してください");
-            }
+                FileRetryCounts = settings.FileRetryCounts,
+                FileRetryWaitMiliSeconds = settings.FileRetryWaitMiliSeconds,
+            };
         }
-
-        #endregion
-
-        #region ファイル操作
+        
         /// <summary>
         /// リトライファイルコピー
         /// </summary>
@@ -113,7 +82,6 @@ namespace Jig.IO
         {
             FileRetry(() => Directory.Delete(sourceFileName, true));
         }
-        #endregion
 
         /// <summary>
         /// リトライ装置のラッパー
@@ -121,18 +89,7 @@ namespace Jig.IO
         /// <param name="method"></param>
         private void FileRetry(Action method)
         {
-            RetryJig.Retry(method, this.FileRetryCount, this.FileRetryWaitSecond);
-        }
-
-        /// <summary>
-        /// メンバ変数表示
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return
-                $"[{nameof(FileRetryCount)}]{this.FileRetryCount}\r\n" +
-                $"[{nameof(FileRetryWaitSecond)}]{this.FileRetryWaitSecond}\r\n";
+            RetryJig.Retry(method, this.FileRetryCounts, this.FileRetryWaitMiliSeconds);
         }
     }
 }

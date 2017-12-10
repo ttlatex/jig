@@ -52,6 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IO\FilePlusSettings.cs" />
+    <Compile Include="IO\SevenZipSettings.cs" />
     <Compile Include="Settings\CmdParser.cs" />
     <Compile Include="Settings\ICmdOptions.cs" />
     <Compile Include="Common\Attribute.cs" />
