@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace B1.Value
+namespace B1.Dto
 {
-    public class SelectedValue
+    public class SelectedRecord
     {
         public string FIRST_NAME { get; set; }
     }

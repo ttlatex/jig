@@ -1,4 +1,4 @@
-﻿using B1.Value;
+﻿using B1.Dto;
 using Jig.Pdf;
 using Jig.Pdf.PdfConstant;
 using System;
@@ -17,7 +17,7 @@ namespace B1.Business
         /// <param name="templatePath">テンプレートPDF</param>
         /// <param name="outputPath">PDF出力先</param>
         /// <param name="parameters">PDF印字文言</param>
-        public static void OutputPDF(string templatePath, string outputPath, List<AssortPdfValue> parameters)
+        public static void OutputPDF(string templatePath, string outputPath, List<AssortPdfPage> parameters)
         {
             var direction = PaperOrientation.Vertical;
 
@@ -34,7 +34,7 @@ namespace B1.Business
             }
         }
 
-        private static void EmbeddedString(PdfEditorLight pdfEditor, AssortPdfValue pageValue)
+        private static void EmbeddedString(PdfEditorLight pdfEditor, AssortPdfPage pageValue)
         {
             // 共通部貼り付け
             pdfEditor.SetText(target: pageValue.Title,

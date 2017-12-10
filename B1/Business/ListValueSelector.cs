@@ -1,5 +1,5 @@
 ﻿using B1.QueryFactory;
-using B1.Value;
+using B1.Dto;
 using Jig.QueryControl;
 using System;
 using System.Collections.Generic;
@@ -13,10 +13,10 @@ namespace B1.Business
     {
         QueryExecuter executer = new QueryExecuter();
 
-        public List<AssortPdfValue> SelectItems()
+        public List<AssortPdfPage> SelectItems()
         {
             var query = B1Query.SerachQuerry();
-            var records = executer.ExecuteSelect<SelectedValue>(query);
+            var records = executer.ExecuteSelect<SelectedRecord>(query);
 
             if (records.Count == 0)
                 return ZeroCountList();
@@ -25,12 +25,12 @@ namespace B1.Business
             int detailNo = 0;
             return records
                 .Buffer(2)
-                .Select((x, i) => new AssortPdfValue
+                .Select((x, i) => new AssortPdfPage
                 {
                     Title = "名前リスト",
                     Page = (i + 1).ToString(),
 
-                    Detail = x.Select(y => new AssortDetailPdfValue
+                    Detail = x.Select(y => new AssortPdfPageDetail
                     {
                         No = (++detailNo).ToString(),
                         Name = y.FIRST_NAME,
@@ -42,16 +42,16 @@ namespace B1.Business
         /// <summary>
         /// 0件時のリスト内容
         /// </summary>
-        public static List<AssortPdfValue> ZeroCountList()
+        public static List<AssortPdfPage> ZeroCountList()
         {
-            var pdfValue = new AssortPdfValue()
+            var pdfValue = new AssortPdfPage()
             {
                 Title = "名前リスト",
                 Page = "1",
-                Detail = new List<AssortDetailPdfValue> { new AssortDetailPdfValue { Name = "---対象なし---" } },
+                Detail = new List<AssortPdfPageDetail> { new AssortPdfPageDetail { Name = "---対象なし---" } },
             };
 
-            return new List<AssortPdfValue> { pdfValue };
+            return new List<AssortPdfPage> { pdfValue };
         }
     }
 }

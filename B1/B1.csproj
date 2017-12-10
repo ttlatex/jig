@@ -54,6 +54,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.4\lib\net451\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -77,14 +80,14 @@
     <Compile Include="Business\DBUpdater.cs" />
     <Compile Include="Business\ListValueSelector.cs" />
     <Compile Include="Business\PdfCreator.cs" />
+    <Compile Include="Business\PdfMapper.cs" />
     <Compile Include="MainFlow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryFactory\B1Query.cs" />
     <Compile Include="Settings\B1Settings.cs" />
-    <Compile Include="Value\AssortDetailPdfValue.cs" />
-    <Compile Include="Value\AssortPdfValue.cs" />
-    <Compile Include="Value\SelectedValue.cs" />
+    <Compile Include="Dto\AssortPdfPage.cs" />
+    <Compile Include="Dto\SelectedRecord.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
