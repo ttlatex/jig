@@ -8,8 +8,6 @@ using System.Linq;
 using System.Printing;
 using System.Threading;
 
-// todo 名前空間が微妙
-
 namespace Jig.Pdf
 {
     /// <summary>

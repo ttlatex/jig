@@ -52,6 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\FileStringValidator.cs" />
+    <Compile Include="Configuration\FileStringValidatorAttribute.cs" />
+    <Compile Include="Configuration\SpecificEnumValidator.cs" />
+    <Compile Include="Configuration\SpecificEnumValidatorAttribute.cs" />
     <Compile Include="IO\FilePlusSettings.cs" />
     <Compile Include="IO\SevenZipSettings.cs" />
     <Compile Include="Settings\CmdParser.cs" />
@@ -76,6 +80,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
