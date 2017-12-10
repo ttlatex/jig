@@ -12,38 +12,29 @@ namespace B1.Business
     public class PdfCreator
     {
         /// <summary>
-        /// 出力ファイルパス
+        /// PDFファイルを出力します
         /// </summary>
-        private string outputPath;
-        /// <summary>
-        /// テンプレートパス
-        /// </summary>
-        private string templatePath;
-
-        public PdfCreator(string templatePath, string outputPath)
-        {
-            this.templatePath = templatePath;
-            this.outputPath = outputPath;
-        }
-
-        public void OutputPDF(List<AssortPdfValue> parameters)
+        /// <param name="templatePath">テンプレートPDF</param>
+        /// <param name="outputPath">PDF出力先</param>
+        /// <param name="parameters">PDF印字文言</param>
+        public static void OutputPDF(string templatePath, string outputPath, List<AssortPdfValue> parameters)
         {
             var direction = PaperOrientation.Vertical;
 
             using (var pdfEditor = new PdfEditorLight())
             {
                 // 新規空PDF作成
-                pdfEditor.CreatePdf(this.outputPath, this.templatePath, 1, direction);
+                pdfEditor.CreatePdf(outputPath, templatePath, 1, direction);
 
                 foreach (var pageValue in parameters)
                 {
                     pdfEditor.AddPage();
-                    this.EmbeddedString(pdfEditor, pageValue);
+                    EmbeddedString(pdfEditor, pageValue);
                 }
             }
         }
 
-        private void EmbeddedString(PdfEditorLight pdfEditor, AssortPdfValue pageValue)
+        private static void EmbeddedString(PdfEditorLight pdfEditor, AssortPdfValue pageValue)
         {
             // 共通部貼り付け
             pdfEditor.SetText(target: pageValue.Title,

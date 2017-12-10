@@ -50,7 +50,7 @@ namespace A1
                 LblResult.Text = new SerchLogic().SearchName(TbxID.Text);
 
             }
-            catch (BusinessError er)
+            catch (ApplicationException er)
             {
                 LblResult.Text = er.Message;
             }

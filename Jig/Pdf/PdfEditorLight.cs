@@ -99,6 +99,8 @@ namespace Jig.Pdf
                 ? templatePdfReader.GetPageSize(templateTargetPage)
                 : templatePdfReader.GetPageSize(templateTargetPage).Rotate();
 
+            Directory.CreateDirectory(Path.GetDirectoryName(outputFilePath));
+
             // 新規ODFオープン
             this.targetPdf = new Document();
             this.targetPdfWriter = PdfWriter.GetInstance(targetPdf, new FileStream(outputFilePath, FileMode.Create));
@@ -159,7 +161,7 @@ namespace Jig.Pdf
         {
             if (disposing)
             {
-                if(this.targetPdf != null && this.targetPdf.IsOpen())
+                if (this.targetPdf != null && this.targetPdf.IsOpen())
                 {
                     this.targetPdf.Close();
                 }

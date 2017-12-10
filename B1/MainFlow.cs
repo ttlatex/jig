@@ -18,54 +18,37 @@ namespace B1
     public class MainFlow
     {
         private ILog logger = LogManager.GetLogger("InfoLogger");
-        private PdfPrinter printer;
-        private B1Settings appSettings;
 
         public void start()
         {
-            if (!this.Init())
-                return;
-
-            this.MainProcess();
-        }
-
-        private bool Init()
-        {
-            this.logger.Info("■処理を開始します");
-
             try
             {
-                this.appSettings = (B1Settings)ConfigurationManager.GetSection("B1Settings");
-                this.printer = new PdfPrinter();
-
-                return true;
+                this.MainProcess();
             }
             catch (Exception ex)
             {
-                logger.Error("初期処理", ex);
-                return false;
+                logger.Error(ex);
             }
         }
 
         private void MainProcess()
         {
-            try
-            {
-                this.logger.Info("データを取得します");
-                var pdfData = new ListValueSelector().SelectItems();
+            this.logger.Info("■処理を開始します");
 
-                this.logger.Info("PDFの出力を行います");
-                var pdfPath = Path.Combine(this.appSettings.OutputFolder, "名前リスト_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf");
-                Directory.CreateDirectory(this.appSettings.OutputFolder);
-                new PdfCreator(this.appSettings.TemplatePath, pdfPath).OutputPDF(pdfData);
+            var settings = (B1Settings)ConfigurationManager.GetSection("B1Settings");
+            var printer = new PdfPrinter();
 
+            this.logger.Info("データを取得します");
+            var pdfData = new ListValueSelector().SelectItems();
 
-            }
-            catch (Exception ex)
-            {
-                this.logger.Error("主処理", ex);
-            }
+            this.logger.Info("PDFの出力を行います");
+            var pdfPath = Path.Combine(settings.OutputFolder, "名前リスト_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf");
+            PdfCreator.OutputPDF(settings.TemplatePath, pdfPath, pdfData);
 
+            this.logger.Info("PDFの出力を行います");
+            printer.PrintPdf(pdfPath);
+
+            this.logger.Info("■処理を終了します");
         }
     }
 }
