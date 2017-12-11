@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.Configuration;
 using System.Diagnostics;
 using System.Drawing.Printing;
@@ -20,42 +19,32 @@ namespace Jig.Pdf
         /// </summary>
         private string AdobeReaderPath;
         /// <summary>
-        /// 印刷ジョブがタイムアウトになる秒数
-        /// </summary>
-        private int JobTimeOutSecound = 20;
-        /// <summary>
         /// 出力先プリンタ名
         /// </summary>
         private string DefaultPrinterName;
+        /// <summary>
+        /// 印刷ジョブがタイムアウトになる秒数(ms)
+        /// </summary>
+        private int JobTimeOutMiliSecounds;
 
         /// <summary>
         /// 生成部、コンフィグセクション指定読み込み
         /// </summary>
         /// <param name="sectionName"></param>
-        public PdfPrinter(string sectionName = "PdfPrintSettings")
+        public static PdfPrinter GetInsance(string sectionName = "PdfPrinterSettings")
         {
-            var settings = ConfigurationManager.GetSection(sectionName) as NameValueCollection;
+
+            var settings = (PdfPrinterSettings)ConfigurationManager.GetSection(sectionName);
             if (settings == null)
                 throw new ArgumentException(sectionName + ":設定ファイル内");
 
-            // AdobeReaderPath
-            this.AdobeReaderPath = settings[nameof(AdobeReaderPath)];
-            if (string.IsNullOrEmpty(this.AdobeReaderPath))
-                throw new ArgumentException(nameof(AdobeReaderPath) + "が設定されていません");
-            if (!File.Exists(this.AdobeReaderPath))
-                throw new FileNotFoundException(this.AdobeReaderPath);
-
-            // DefaultPrinterName
-            this.DefaultPrinterName = settings[nameof(DefaultPrinterName)]
-                ?? new PrintDocument().PrinterSettings.PrinterName;
-
-            // JobTimeOutSecound
-            string _JobTimeOutSecound = settings[nameof(JobTimeOutSecound)];
-            if (!string.IsNullOrEmpty(_JobTimeOutSecound))
+            return new PdfPrinter
             {
-                if (!int.TryParse(_JobTimeOutSecound, out this.JobTimeOutSecound))
-                    throw new ArgumentException(nameof(JobTimeOutSecound) + "には整数値を設定してください");
-            }
+                AdobeReaderPath = settings.AdobeReaderPath,
+                DefaultPrinterName = settings.AdobeReaderPath
+                  ?? new PrintDocument().PrinterSettings.PrinterName,
+                JobTimeOutMiliSecounds = settings.FileRetryWaitMiliSeconds,
+            };
         }
 
         public void PrintPdf(string filePath)
@@ -93,14 +82,14 @@ namespace Jig.Pdf
         /// </summary>
         private void StartPrintob(string pdfFileName, PrintQueue que)
         {
-            foreach (var i in Enumerable.Range(0, this.JobTimeOutSecound))
+            foreach (var i in Enumerable.Range(0, this.JobTimeOutMiliSecounds / 100))
             {
                 var hasPrintPdfName = que.GetPrintJobInfoCollection().Any(x => x.Name.EndsWith(pdfFileName));
 
                 // キューに対象ジョブがないので終了
                 if (!hasPrintPdfName) return;
 
-                Thread.Sleep(1000);
+                Thread.Sleep(100);
             }
 
             throw new TimeoutException("印刷を開始できませんでした");
@@ -111,14 +100,14 @@ namespace Jig.Pdf
         /// </summary>
         private void FinishPrintob(string pdfFileName, PrintQueue que)
         {
-            foreach (var i in Enumerable.Range(0, this.JobTimeOutSecound))
+            foreach (var i in Enumerable.Range(0, this.JobTimeOutMiliSecounds / 100))
             {
                 var hasPrintPdfName = que.GetPrintJobInfoCollection().Any(x => x.Name.EndsWith(pdfFileName));
 
                 // キューに対象ジョブがないので終了
                 if (!hasPrintPdfName) return;
 
-                Thread.Sleep(1000);
+                Thread.Sleep(100);
             }
 
             throw new TimeoutException("印刷処理がタイムアウトしました");

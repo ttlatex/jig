@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
+using Oracle.DataAccess.Client;
 
 namespace B1.Business
 {
@@ -13,10 +15,14 @@ namespace B1.Business
     {
         public static List<SelectedRecord> SelectItems()
         {
-            QueryExecuter executer = new QueryExecuter();
+            var connectionstring = ConfigurationManager.ConnectionStrings["OracleConnection"].ConnectionString;
 
-            var query = B1Query.SerachQuerry();
-            return executer.ExecuteSelect<SelectedRecord>(query);
+            using (var connection = new OracleConnection(connectionstring))
+            {
+                connection.Open();
+                
+                return B1Query.SerachQuerry(connection);
+            }
         }
     }
 }

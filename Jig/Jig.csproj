@@ -58,6 +58,7 @@
     <Compile Include="Configuration\SpecificEnumValidatorAttribute.cs" />
     <Compile Include="IO\FilePlusSettings.cs" />
     <Compile Include="IO\SevenZipSettings.cs" />
+    <Compile Include="Pdf\PdfPrinterSettings.cs" />
     <Compile Include="Settings\CmdParser.cs" />
     <Compile Include="Settings\ICmdOptions.cs" />
     <Compile Include="Common\Attribute.cs" />

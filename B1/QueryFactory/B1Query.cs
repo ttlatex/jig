@@ -1,15 +1,18 @@
 ﻿using Jig.QueryControl;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
+using B1.Dto;
 
 namespace B1.QueryFactory
 {
     public class B1Query
     {
-        public static Query SerachQuerry()
+        public static List<SelectedRecord> SerachQuerry(DbConnection connection)
         {
             const string sql = @"
 SELECT
@@ -19,7 +22,7 @@ FROM
 Where
     EMPLOYEE_ID <= 10
 ";
-            return new Query(sql, null);
+            return connection.Query<SelectedRecord>(sql).ToList();
         }
 
         public static Query UpdateQuerry()

@@ -3,12 +3,8 @@ using B1.Settings;
 using Jig.Pdf;
 using log4net;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace B1
 {
@@ -36,7 +32,7 @@ namespace B1
             this.logger.Info("■処理を開始します");
 
             var settings = (B1Settings)ConfigurationManager.GetSection("B1Settings");
-            var printer = new PdfPrinter();
+            var printer = PdfPrinter.GetInsance();
 
             this.logger.Info("データを取得します");
             var records = ListValueSelector.SelectItems();
