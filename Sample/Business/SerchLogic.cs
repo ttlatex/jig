@@ -1,11 +1,8 @@
-﻿using Jig.QueryControl;
-using A1.Value;
-using System;
-using System.Collections.Generic;
+﻿using Dapper;
+using Jig.QueryControl;
+using Oracle.ManagedDataAccess.Client;
+using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using A1.QueryFactory;
 
 namespace A1.Business
 {
@@ -15,14 +12,19 @@ namespace A1.Business
 
         public string SearchName(string id)
         {
-            var iValue = new InputValue() { IN_ID = id };
+            var connectionstring = ConfigurationManager.ConnectionStrings["OracleConnection"].ConnectionString;
 
-            var query = new SearchQuery().IDQuery(iValue);
-            var output = executer.StoreProcedure<OutputValue>(query);
+            using (var connection = new OracleConnection(connectionstring))
+            {
+                connection.Open();
 
-            return (output.OUT_NAME == null)
-                ? "検索結果は0件です"
-                : output.OUT_NAME;
+                var param = new { IN_ID = id, IN_PHONE_NUMBER = "" };
+                var outName = connection.QuerySingleOrDefault<string>("PKG_A1.SELECT_NAME", param);
+
+                return (outName == null)
+                    ? "検索結果は0件です"
+                    : outName;
+            }
         }
     }
 }
