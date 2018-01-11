@@ -1,4 +1,4 @@
-﻿using Oracle.DataAccess.Client;
+﻿using Oracle.ManagedDataAccess.Client;
 using System.Collections.Generic;
 
 namespace Jig.QueryControl
