@@ -46,8 +46,6 @@
   <ItemGroup>
     <Compile Include="Common\RetryTest.cs" />
     <Compile Include="IO\SevenZipTest.cs" />
-    <Compile Include="Layout\LayoutRendererTest.cs" />
-    <Compile Include="Layout\ModelStringTest.cs" />
     <Compile Include="Pdf\PdfPrintTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

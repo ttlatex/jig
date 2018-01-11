@@ -65,8 +65,6 @@
     <Compile Include="Common\RetryJig.cs" />
     <Compile Include="IO\FilePlus.cs" />
     <Compile Include="IO\SevenZip.cs" />
-    <Compile Include="Layout\LayoutRenderer.cs" />
-    <Compile Include="Layout\ModelString.cs" />
     <Compile Include="Pdf\PdfConstant.cs" />
     <Compile Include="Pdf\PdfEditorLight.cs" />
     <Compile Include="Pdf\PdfPrinter.cs" />
