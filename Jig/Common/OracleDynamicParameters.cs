@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using Oracle.ManagedDataAccess.Types;
 using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,17 +17,13 @@ namespace Jig.Common
 
         private class ParamInfo
         {
-
             public string Name { get; set; }
-
             public object Value { get; set; }
-
             public ParameterDirection ParameterDirection { get; set; }
-
             public OracleDbType? DbType { get; set; }
-
+            public OracleCollectionType? CollectionType { get; set; }
             public int? Size { get; set; }
-
+            public int? AssociateiveArrayCount { get; set; }
             public IDbDataParameter AttachedParam { get; set; }
         }
 
@@ -116,13 +112,23 @@ namespace Jig.Common
         /// <param name="size"></param>
         public void Add(
 #if CSHARP30
-			string name, object value, DbType? dbType, ParameterDirection? direction, int? size
+			string name, object value, DbType? dbType, ParameterDirection? direction, int? size, OracleCollectionType? collectionType, int? associateiveArrayCount
 #else
- string name, object value = null, OracleDbType? dbType = null, ParameterDirection? direction = null, int? size = null
+            string name, object value = null, OracleDbType? dbType = null, ParameterDirection? direction = null, int? size = null, OracleCollectionType? collectionType = null, int? associateiveArrayCount = null
 #endif
  )
         {
-            parameters[Clean(name)] = new ParamInfo() { Name = name, Value = value, ParameterDirection = direction ?? ParameterDirection.Input, DbType = dbType, Size = size };
+            parameters[Clean(name)] =
+                new ParamInfo()
+                {
+                    Name = name,
+                    Value = value,
+                    ParameterDirection = direction ?? ParameterDirection.Input,
+                    DbType = dbType,
+                    Size = size,
+                    CollectionType = collectionType,
+                    AssociateiveArrayCount = associateiveArrayCount,
+                };
         }
 
         private static string Clean(string name)
@@ -204,6 +210,21 @@ namespace Jig.Common
                 if (param.DbType != null)
                 {
                     p.OracleDbType = param.DbType.Value;
+                }
+                if(param.CollectionType != null)
+                {
+                    p.CollectionType = param.CollectionType.Value;
+                    if(param.DbType == OracleDbType.Varchar2)
+                    {
+                        if(param.ParameterDirection == ParameterDirection.Input)
+                        {
+                            p.ArrayBindSize = ((IEnumerable<string>)param.Value).Select(x => x.Length).ToArray();
+                        }
+                        if (param.ParameterDirection == ParameterDirection.Output)
+                        {
+                            p.ArrayBindSize = Enumerable.Repeat(param.Size.Value, param.AssociateiveArrayCount.Value).ToArray();
+                        }
+                    }
                 }
                 if (add)
                 {

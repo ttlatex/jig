@@ -2,6 +2,7 @@
 using Jig.QueryControl;
 using Oracle.ManagedDataAccess.Client;
 using System.Configuration;
+using System.Data;
 using System.Linq;
 
 namespace A1.Business
@@ -19,7 +20,7 @@ namespace A1.Business
                 connection.Open();
 
                 var param = new { IN_ID = id, IN_PHONE_NUMBER = "" };
-                var outName = connection.QuerySingleOrDefault<string>("PKG_A1.SELECT_NAME", param);
+                var outName = connection.QuerySingleOrDefault<string>("PKG_A1.SELECT_NAME", param, commandType: CommandType.StoredProcedure);
 
                 return (outName == null)
                     ? "検索結果は0件です"
