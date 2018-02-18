@@ -22,43 +22,22 @@ namespace A1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            try
-            {
-                var options = CmdParser.Instance<CmdOptions>(Environment.GetCommandLineArgs());
+            var options = CmdParser.Instance<CmdOptions>(Environment.GetCommandLineArgs());
 
-                LblTitle.Text = options.TitleName;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.StackTrace);
-            }
+            LblTitle.Text = options.TitleName;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            try
+            // input error
+            if (TbxID.Text == "")
             {
-                // input error
-                if (TbxID.Text == "")
-                {
-                    LblResult.Text = "検索条件が空白です、値を入力してください";
-                    return;
-                }
+                LblResult.Text = "検索条件が空白です、値を入力してください";
+                return;
+            }
 
-                // business logic
-                LblResult.Text = new SerchLogic().SearchName(TbxID.Text);
-
-            }
-            catch (ApplicationException er)
-            {
-                LblResult.Text = er.Message;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.StackTrace);
-            }
+            // business logic
+            LblResult.Text = new SerchLogic().SearchName(TbxID.Text);
         }
     }
 }

@@ -17,14 +17,7 @@ namespace B1
 
         public void start()
         {
-            try
-            {
-                this.MainProcess();
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-            }
+            this.MainProcess();
         }
 
         private void MainProcess()

@@ -3,7 +3,6 @@ using Jig.QueryControl;
 using Oracle.ManagedDataAccess.Client;
 using System.Configuration;
 using System.Data;
-using System.Linq;
 
 namespace A1.Business
 {
